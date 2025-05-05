@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>passport portrait</title>
+    <style>
+        /* Basic reset and body styling */
+        body {
+            margin: 0;
+            font-family: "Times New Roman", Times, serif; /* Set Times New Roman font */
+            color: #000; /* Black text */
+            background-color: #fff; /* White background */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Ensure body takes at least full viewport height */
+            transition: background-color 0.3s, color 0.3s; /* Smooth transition for dark mode */
+        }
+
+        /* Header styling */
+        .header {
+            display: flex;
+            align-items: center; /* Vertically align items in the header */
+            padding: 10px;
+        }
+
+        .header .title-container {
+            display: flex; /* Use flexbox to align title and ascii art */
+            align-items: center; /* Vertically align title and ascii art */
+            flex-grow: 1; /* Allow the container to take available space */
+            margin-right: 10px; /* Space between this container and the image */
+            border: 1px solid #000; /* Black border for the combined title area */
+            padding: 5px; /* Padding inside the border */
+            box-sizing: border-box; /* Include padding and border in the element's total width */
+            transition: border-color 0.3s; /* Smooth transition for dark mode */
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            margin-right: 10px; /* Space between title text and ASCII art */
+        }
+
+        .header .ascii-art {
+            font-size: 12px; /* Adjust size for ASCII art */
+            white-space: pre; /* Preserve whitespace and line breaks */
+            line-height: 1; /* Adjust line height */
+        }
+
+        .header .header-image { /* Changed class name for clarity */
+            width: 50px; /* Image size */
+            height: 50px;
+            object-fit: cover; /* Ensure the image covers the area without distortion */
+            flex-shrink: 0; /* Prevent the image from shrinking */
+        }
+
+        /* Main content area layout */
+        .container {
+            display: flex;
+            flex: 1; /* Allow container to grow and take available space */
+        }
+
+        /* Sidebar navigation styling */
+        .sidebar {
+            width: 200px; /* Fixed width for the sidebar */
+            padding: 10px;
+            box-sizing: border-box; /* Include padding in the width */
+            overflow-y: auto; /* Add scroll if content exceeds sidebar height */
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Style for the Table of Contents list item (now always visible) */
+        .sidebar li {
+            margin-bottom: 5px; /* Added margin-bottom for spacing between main list items */
+            cursor: pointer; /* Indicate clickable items */
+            padding: 5px; /* Add padding inside the box */
+            border: 1px solid #000; /* Black border for the box */
+            display: block; /* Ensure the border wraps the list item */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+            transition: border-color 0.3s, background-color 0.3s; /* Smooth transition */
+        }
+
+         /* Style for the nested dropdown content (now always visible) */
+        .sidebar .dropdown-content {
+            display: block; /* Always display the content */
+            padding-left: 0; /* Remove left padding */
+            margin-top: 5px; /* Space between Table of Contents box and menu items */
+        }
+
+        .sidebar .dropdown-content li {
+             padding: 5px; /* Padding inside the menu item box */
+             border: 1px solid #000; /* Black border for menu item box */
+             margin-bottom: 5px; /* Added margin-bottom for spacing between dropdown items */
+             display: block; /* Ensure the border wraps the list item */
+             box-sizing: border-box; /* Include padding and border in the element's total width and height */
+             transition: border-color 0.3s, background-color 0.3s; /* Smooth transition */
+        }
+
+        .sidebar li a {
+            text-decoration: none;
+            color: #000; /* Black link color */
+            display: block; /* Make the whole link area clickable */
+            padding: 0; /* Remove padding here as it's on the li */
+            transition: color 0.3s; /* Smooth transition */
+        }
+
+        .sidebar li a:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+
+        /* --- Dark Mode Toggle Button Style --- */
+        .dark-mode-toggle {
+            margin-top: 15px; /* Space above the button */
+            padding: 8px;
+            border: 1px solid #000;
+            background-color: #eee;
+            color: #000;
+            cursor: pointer;
+            text-align: center;
+            font-family: "Times New Roman", Times, serif;
+            font-size: 14px;
+            display: block; /* Make it block level */
+            width: 100%; /* Make it full width of sidebar padding */
+            box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+        .dark-mode-toggle:hover {
+            background-color: #ddd;
+        }
+
+        /* Style for ASCII art in the sidebar */
+        .sidebar .sidebar-ascii-art {
+            font-size: 8px; /* Smaller font size for sidebar ASCII art */
+            white-space: pre; /* Preserve whitespace and line breaks */
+            line-height: 1; /* Adjust line height */
+            margin-top: 20px; /* Space above the ASCII art */
+            overflow-x: auto; /* Add horizontal scroll if needed */
+            /* Text color will inherit from body */
+        }
+
+
+        /* Main content area styling */
+        .main-content {
+            flex: 1; /* Allow main content to grow and take remaining space */
+            padding: 10px;
+        }
+
+        /* Added style to align the first element in main content with the sidebar content */
+        .main-content > :first-child {
+            margin-top: 6px; /* Adjust this value to fine-tune alignment */
+        }
+
+        /* Added style for paragraphs within main content */
+        .main-content p {
+            line-height: 1.6; /* Adjust this value to increase/decrease spacing */
+            margin-bottom: 1em; /* Add space between paragraphs */
+        }
+
+        /* Style for images within main content */
+        .main-content img {
+            float: right; /* Float the image to the right */
+            margin: 0 0 10px 10px; /* Add margin: top right bottom left */
+            max-width: 50%; /* Ensure image doesn't take up too much width */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        /* Style for individual journal entry container */
+        .journal-entry {
+            margin-bottom: 20px; /* Increased space between journal entries */
+        }
+
+        /* Style for journal entry box */
+        .journal-entry-box {
+            border: 1px solid #000; /* Black border for the box */
+            padding: 10px; /* Padding inside the box */
+            margin-top: 5px; /* Space between the title/date and the box */
+            transition: border-color 0.3s; /* Smooth transition */
+        }
+
+        /* Style for journal entry title and date container */
+        .journal-header {
+            font-weight: bold; /* Make the title bold */
+        }
+
+        .journal-header .journal-entry-date {
+            font-style: italic; /* Make the date italic */
+            margin-left: 5px; /* Space between title and date */
+            display: inline; /* Keep date on the same line as title */
+            font-weight: normal; /* Remove bold from date */
+        }
+
+        /* Style for the back to top link */
+        .back-to-top {
+            display: block; /* Make the link a block element */
+            margin-top: 20px; /* Space above the link */
+            text-align: center; /* Center the link */
+            text-decoration: none; /* Remove underline */
+            color: #000; /* Black link color */
+            font-weight: bold;
+            transition: color 0.3s; /* Smooth transition */
+        }
+
+        .back-to-top:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+
+        /* --- Dark Mode Styles --- */
+        body.dark-mode {
+            background-color: #121212; /* Dark background */
+            color: #e0e0e0; /* Light grey text */
+        }
+
+        body.dark-mode .header .title-container,
+        body.dark-mode .sidebar li,
+        body.dark-mode .sidebar .dropdown-content li,
+        body.dark-mode .journal-entry-box {
+            border-color: #555; /* Darker border */
+        }
+
+         body.dark-mode .sidebar li,
+         body.dark-mode .sidebar .dropdown-content li {
+            background-color: #1f1f1f; /* Slightly lighter dark for boxes */
+         }
+
+
+        body.dark-mode .sidebar li a,
+        body.dark-mode .back-to-top {
+            color: #e0e0e0; /* Light grey link text */
+        }
+
+        body.dark-mode .dark-mode-toggle {
+            background-color: #333;
+            color: #e0e0e0;
+            border-color: #555;
+        }
+         body.dark-mode .dark-mode-toggle:hover {
+            background-color: #444;
+        }
+
+         /* Adjust image brightness in dark mode if needed */
+         /*
+         body.dark-mode img {
+            filter: brightness(0.8);
+         }
+         */
+
+    </style>
+</head>
+<body id="top">
+    <div class="header">
+        <div class="title-container">
+            <h1>portrait of a dog</h1>
+            <pre class="ascii-art">
+^..^      /
+/_/\_____/
+   /\   /\
+  /  \ /  \</pre>
+        </div>
+        <img src="emoji (2) (1).png" alt="Cat Image" class="header-image" id="header-image"> </div>
+
+    <div class="container">
+        <div class="sidebar">
+            <ul>
+                <li>
+                    <a href="#">table of contents</a>
+                    <ul id="tos-dropdown" class="dropdown-content">
+                        <li><a href="#" onclick="loadContent('intro'); return false;">proven guilty</a></li>
+                        <li><a href="#" onclick="loadContent('essay1'); return false;">pictures of you</a></li>
+                        <li><a href="#" onclick="loadContent('essay2'); return false;">my name?</a></li>
+                        <li><a href="#" onclick="loadContent('essay3'); return false;">lost in translation</a></li>
+                        <li><a href="#" onclick="loadContent('essay4'); return false;">five in the afternoon</a></li>
+                        <li><a href="#" onclick="loadContent('jor'); return false;">journal entries</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="dark-mode-toggle" id="darkModeToggle">Toggle Dark Mode</button>
+
+            <pre class="sidebar-ascii-art"></pre>
+        </div>
+
+        <div class="main-content" id="main-content">
+            </div>
+    </div>
+
+    <script>
+        // Object to hold the content for each section (Ensure this is complete)
+        const contentData = {
+            'intro': `
+                <h2>proven guilty</h2>
+                <p>To be honest, most of the work we did in this class wasn’t really what I was expecting in a class called “Creative Passports”. It’s not that it’s not an appropriate title for the class, now that I’ve taken it, I think it’s perfect, but I came into this class thinking we were going to literally do, travel writing. I was honestly apprehensive about taking this class. I put it onto my schedule, seeing that it took place right after my computer science class, just to get my day on campus over as quickly as possible, without actually reading the title of class itself. I remember it being made very clear that this wasn’t a travel writing class on the first day. It’s not that I would’ve disliked doing travel writing, but my experiences as a traveler would probably be deeply uninteresting. There’s only so much a person could really say about the state of Pennsylvania.</p>
+                <p>I think I got really lucky with the topics you gave us to work with for the last three papers. I have a deep sense of guilt and shame over many aspects of myself, such as my name or my religion or my gender, that I’ve spent an ungodly amount of time thinking about, which I’ve also consequently felt guilty about wasting my time on. The one good thing that came out of spending so much time thinking was that writing about my guilt came to me very easily. Maybe if I spent a little more time workshopping my work, I could have gotten across my points in a more elegant manner, but I think having my raw thoughts on paper holds some value as well. Even though my works are my own, I kind of enjoy reading them over after I finish. It helps me assess the validity or reflect on the emotions I’ve had related to the paper.</p>
+                <p>I can’t really say I have the deepest reason for the title of this compilation of my works from this class. “Portrait of A Dog”, is just the title of the last episode of the first season of Family Guy, the background noise I used to write all four of my essays this semester. The first season is incredibly short, only about two and a half hours long, and even though technically I’ve listened to it many times, I can’t really recite any jokes or plot points in the first six episodes. Portrait of A Dog stood out to me because of how insanely jarring the first gag is. It hasn’t ever failed to take me out of my flow, and I end up paying more attention to the episode than my own writing. I don’t want to dive too deep and turn this into some film review, but I genuinely do enjoy that episode specifically. Granted, it’s the only one I’ve watched fully, but it’s something that caught my attention enough for me to watch it fully. Out of curiosity, I looked into the episode itself, and found that it was written by Michael Dimartino, who, interestingly, also wrote The Last Airbender, which was my favorite show as a kid. I guess his writing just really resonates with me. As for why any of these aspects made me decide to title this site after the episode, I had a few ideas that I couldn’t really tie together. The first thing that came to my mind when I was brainstorming any links between my work was the whole process of it all, and I thought that episode, to me, was memorable. Dogs aren’t really a huge part of my life now, but growing up I went through that phase of begging my parents for a puppy. I remember building a toy dog out of mega blocks (giant lego pieces) and sleeping with its jagged corners digging into my chest. My Chinese zodiac sign is also the dog, and since my works are based on my experiences and my identity, I guess I could frame that as a reason for my title.</p>
+                <p>I have to apologize for appearing pretty disengaged throughout class. My participation was pretty nonexistent, and I think I’ve missed a class or two without much notice. It probably didn’t help that I wore headphones in class (that were turned off), to keep my hair off of my head, so I probably came off as a little disrespectful. Hopefully my writing was able to create a better impression of myself than my own appearance.</p>
+                <a href="#top" class="back-to-top">Back to Top</a>
+            `,
+            'essay1': `
+                <h2>pictures of you</h2>
+                <img src="image (3).jpg" alt="Embedded Image" style="float: right; margin: 0 0 10px 10px; max-width: 50%; height: auto;"> <p>Technically speaking, this would be a terrible passport photo. If I took this with me to the airport, I would definitely be detained by the TSA. I doubt the post office would even let me send this into the GPO. The angle isn't straight on, there are unnecessary objects spoiling the picture, the background isn't white, and most glaring of all, my face isn't even in the frame. Even though I am, in fact, in the picture, I could never use this image to legally identify myself to any official. It's worthless to them. In my own eyes, this picture is far from worthless.</p>
+                <p>This image caught one of my first interactions with my pet cat, Charlie. I had just got done with trying to get him to eat his dry food, which at the time I didn't realize he was too young to chew properly. I had spent about 5 minutes crushing his food with a brick, trying to make it brittle enough for Charlie to eat. Some might question why I wasn't prepared to take care of a cat this young, getting a pet is usually something people prepare for. Unfortunately, my introduction to Charlie happened in a chaotic and sudden manner. Reflecting on that day, almost everything that happened leading up to that picture felt eventful. The day before was the day of my high school senior prom. I wasn't told I had a prom date until the day before the dance, and then abruptly had a whole list of responsibilities to get done the day of the dance. I got up early in the morning, I cut my hair a little shorter, she wanted my tie to match her dress so I had to go back and exchange my dark blue tie for a lighter blue one, I had to buy some flower arrangements, then I had to get ready for the whole thing, I was exhausted before the dance even started. Despite the circumstances, it was a great time. It was extremely entertaining to see my friends dressed formally for once. When I got home it was quite late at night, around 3 or 4 in the morning, and there wasn't any class the next day so I didn't bother setting any alarms and fell asleep in my suit pants almost as soon as I laid on my bed. I awoke around twelve in the afternoon, and as soon as I had finished freshening up to spend the whole day doing absolutely nothing, I heard strange noises coming from the hallway outside my room.</p>
+                <p>I went to go check on the noise, presuming it to be coming from outside. When I got to the entrance, it was a shocking sight. It was my uncle, with a tiny kitten slung over his shoulder. He dropped the kitten into my arms, and went to go smoke with his friend. I was more confused and lost than anything, I hadn't gotten any idea of anyone in my family bringing a cat home, especially a kitten. I didn't really know what to do, so I left him in the bedroom of my two sisters, who were both equally as confused and enamored with the thing as I was. I can remember Charlie being especially meek, he wouldn't try to bite or scratch us, but he was trying to hide himself in the corner of my sister's bed. My initial concern was trying to keep the poor thing alive, at the time I wasn't sure if we were going to keep him, but I didn't want him to die of starvation or dehydration because of our own failures. My uncle who had brought him home had told me he was going to get food for him when he came home, but I guess he forgot because he came home empty handed and fell asleep on my grandma's bed. I really didn't want Charlie to starve, so I took a short walk to my local Petco and spent whatever little money I had after prom on some pet supplies. There wasn't all that much to spend, nor did I know what I needed to care for a cat that young, but I came home with some food and toys. By the time I came back, Charlie had already urinated on my sister's sheets, and he was screaming as loud as his little voice could carry. I thought he was probably starving, so I brought him to my room and poured some of the dry food I got him in the dish I had bought. He went right for it, and at first presumably started eating, but after inspecting the dish, it was clear that he wasn't actually eating it, but licking the food itself. I didn't really know what to do. I couldn't return food that I had already opened, so I did what I thought was the most reasonable thing to do. The next few minutes of my life was spent crushing the pellets of food with half of a brick that my dad keeps covering in tin foil to press chicken thighs. I was genuinely relieved to see the food disappear from the bowl. If my efforts to feed him had gone to waste, honestly, I think I would've cried. I sat next to him watching him eat, and when he was done, I guess he felt comfortable enough to crawl onto my lap. That's when my youngest sister was able to capture this great moment.</p>
+                <p>At that moment, I was finally able to experience a real sense of peace after the havoc of the past 48 hours. It was the most rewarded I had felt in quite a long time. The fact that this scared, almost pathetic creature that was shaking and hiding a few hours ago, felt comfortable enough to crawl onto my lap after I fed it made me feel strangely loved and appreciated. At first, I was convinced that this was temporary, I was convinced that we would return him to his mother, he was too young, it was too sudden. But when he crawled onto my lap, I realized that he wasn't going anywhere. This moment also holds personal value to me because Charlie isn't the most physically affectionate cat. He's not aggressive or dismissive but he likes to have his space. Sometimes I'll wake up and he'll be sleeping on my couch across from me. In my parents room he likes to sleep on the bedside table, in my sisters room he'll be sleeping on the carpet, he almost never chooses to sleep alongside someone else. On the rare occasions he's ever on anyone's bed, it's usually because they're not home. Sometime ago, I had come home from class to find him sleeping on my bed, and when he noticed me, he got up and moved to his own bed in the kitchen. That picture is one of the few moments I have that he's willingly decided to show affection by proximity, and I cherish it immensely.</p>
+                <p>I dislike my official passport photo. I have to move all of the hair out of my face, which is difficult considering I have so much of it. One remark I've gotten frequently is that I look upset, most of the time. It's a criticism that I've been dealing with for a while, and one of the worst things to hear from anyone, at least to me. But looking at my passport photo, I can definitely see where this comment comes from. It feels like my passport photo brings out the worst parts of me. When I move my hair out of my face my acne is more visible, which is something that bothers me. Maybe one day I'll be comfortable with this almost sterile version of myself, but I doubt it'll ever outweigh the joy of presenting myself in a form that makes me most comfortable.</p>
+                <a href="#top" class="back-to-top">Back to Top</a>
+            `,
+            'essay2': `
+                <h2>my name?</h2>
+                 <p>The truth is, I hate my name. The guilt I feel admitting my revulsion towards my name gnaws at me whenever my monologue late at night turns self-loathing. For the majority of my life outside of my home, I've always gone by my first name "Khondker". Initially, it was meant to be my last name, but my parents had switched around my first and last names at birth, making it my legal first name. I'm not completely sure of the validity of that story. I share this name with my father, my uncles, my grandfather and his father, and presumably his own father and so on. As far as I know, the meaning of my legal name is "teacher", or "instructor". Ironically, it was my experience as a student that sparked the contempt I have for the name passed down onto me.</p>
+                <p>I didn't even know my first name was really my name until I started school at five. At home, I was always called by my last name, Ayat. To be honest, I didn't even know I had a first name at all. But from the point that I was given that pre-printed name tag on the first day of kindergarten by my mom, my name was now Khondker. I can clearly remember being somewhat confused, but I was five, and this was just the name hanging off of my neck. Thus began a years-long identity battle between me and my first name. The most glaring, but least remarkable gripe that I've had with my name in the past was the constant task of people asking how to pronounce it. Every academic year, up until I stopped using my first name entirely, I've had to constantly provide anyone new I've interacted with my interpretation of my name, only for them to mispronounce it regardless. I can appreciate the effort, it's definitely not an easy name especially to those used to more anglo-saxon names than mine, but hearing my own name used in conversation is usually irritating to me, as it sounds like they're struggling to refer to me.</p>
+                <p>Another, increasingly selfish and narcissistic reason I have for disliking my name is just the look and sound of it. My first name isn't really the most pleasing word. To me, it just looks strange on paper. It sounds like there are too many consonants and too few vowels. I got agitated putting it in bold font on my resume. Hearing anyone call me by that name now makes me feel exasperated, especially since I've started going by my last name. Even with other brown kids like myself, my name is uncommon. As far as I've observed, most people with my name on Wikipedia use their middle names in place of their first. Truthfully, this is the main reason I made the decision to introduce myself or correct people to use my last name instead of my first. Ayat isn't the most pleasing name either, but I genuinely felt more confidence when I started using it in place of my first name. I'm well aware of how self-obsessed and egocentric it might seem to abandon my first name for such a minute and insignificant reason, and despite it, I continue to hate referring to myself as my first name all together. Just knowing this makes me incredibly guilty.</p>
+                <p>I know I'm not the only person in the world who has ever changed their name given to them at birth. Some people switch their name to fit their change in identity, or for religious or personal reasons. I know people who have done the exact same thing as me, changing their names just because they didn't really like it. But it feels like the reasons others would do it are infinitely more rational than mine. It's difficult not to question my right to stop using my name when my name has been used within my family for more than a century at this point. To be fair to myself, my family has never used my first name to ever refer to me, even back in my mother country. They don't care that I've stopped using my first name to refer to myself in social settings. I can assume that my ancestors probably received similar treatment to how others used their names, and I'm just doing what everyone else with a name like mine has done in the past. But unlike them, I grew up in America. Everyone just assumes your first name is what someone is supposed to refer to you as, a lot of people find being called by their last names demeaning or rude. "Khondker" is my legal first name, and here, in this country, everyone's just going to call me by that name.</p>
+                <p>It's not like my name is attached to any unsavory individuals. On my dad's side, all of my uncles share the same first name with me as well. Every single one of them are extremely gifted individuals. There are actors, artists, activists, politicians, professors, and writers in which I share both blood and name with. I should feel honored to be able to call myself "Khondker", I should hope that people would associate this name with me. Unfortunately, I outright just don't feel that way, instead I end up self-conscious and uncomfortable. There should be a better reason for the distaste I have for my first name. Maybe I don't think I could live up to the great things people in my family have done with my name, or, it's possible I just have bad memories associated with my first name. But those reasons are contrived to me, I'm not really concerned about living up to anyone's standards but my own, and no memory surrounding my name seems remarkable at all. If I'm going to be sincere with myself, I have to accept the fact that I've stopped using my first name, only for superficial and shallow reasons. Despite knowing this to be the truth, I continue to not use my first name and correct anyone who calls me by it. I continue to be conceited about the beauty or lack thereof of my first name. Even with the guilt I have for feeling this way, I don't do anything to alter how I feel about my first name. I don't see myself in the future ever willingly going back to my first name. Honestly, it's more likely I double down and swap around my names legally and fix my parents mistake myself, rather than ever look back. During my orientation, my name tag had been printed out with my preferred first name and my legal last name, which were the exact same. At the very least I'm keeping my first name in some shape or form if I decide to swap it around legally, and maybe that'll be enough to ease some of the shame that I have about not using my first name at all.</p>
+                <p>Usually when I read stories about people with ethnic names like mine, it's usually about the ways they have reclaimed their heritage and culture and the pride associated with their identities. I lack the same sense of conviction that others like me have. By continuing to deny my first name, I'm denying the history, pride, and honor that my family name has held throughout my own ancestry. In spite of this, I continue to retract "Khondker" as my first name, for my own self-absorbed and decidedly selfish reasons. I'm mature enough to admit that I'm wrong, but I'm too immature to take action and reclaim my name, and I don't plan on reclaiming my name anytime soon. I can only hope that I can forgive myself for my personal failures, and forgive myself for abandoning a part of my culture for such superficial reasons.</p>
+                <a href="#top" class="back-to-top">Back to Top</a>
+            `,
+            'essay3': `
+                <h2>lost in translation</h2>
+                <p>It’s difficult to believe that we, as human beings, weren’t born with spoken language. To be able to fathom a world without language almost seems to contradict itself, how could you even fathom anything at all without language? Gestures and drawings only get us so far, the act of interpretation needs language anyways. I think the closest we as modern people could get to experiencing life absent of language is by interacting with languages foreign to our own. The language barrier is a remarkable obstacle for human communication. I can call the kid I know at the park that only speaks Portuguese a friend as much as I want, but I really don’t know the guy at all besides that he likes soccer and grapefruit soda. If he’s even told me anything about himself that isn’t visible from the outside looking in, I’ve probably never even realized it. Without language, it’s hard to deepen the understandings and perceptions that we have of one another past our physical traits. In a way, this phenomenon within language has influenced the way I perceive the people closest to me, my parents.</p>
+                <p>There isn’t too much of an actual language barrier between myself and my parents. I can speak Bangla just enough to get by while talking to my extended family. My father knows English at about the same level as I do Bangla, and my mother is nearly fluent in it. Despite the fact that we share the same languages, in my experience, a language barrier goes further than just being able to understand one another. It can manifest in the differences in cultural experience, ideology, and religious dogma. My parents did a good job in instilling their language into my mind when I was pretty young. My grammar and vocabulary is lacking, but talking in Bangla feels nearly as characteristic as talking in english. However, for some reason, I struggle to comprehend and enjoy Bengali media. My parents almost exclusively watch shows, listen to music, read books, all in Bangla. I’ve always just viewed it as all background noise. I don’t go out of my way to seek out and experience my parents' culture past the things I experience existing in my home. Unfortunately, my lack of interest in their own interests makes it difficult to connect with them past the fact that I just love them dearly. I can’t really pinpoint what my parents really enjoy in the same way I can with my siblings and friends, if it’s not just an activity. This feeling hits the hardest during the birthday season in my household, which is during February. They both refuse giving me a straight answer on what they really want, so it falls on me to figure out their gifts. I usually end up managing something generic enough for them to enjoy, but I don’t think I’ve ever given a gift that they would really love. The art a person enjoys is a significant component of who a person is, and not knowing what really moves someone emotionally is a disadvantage in the ways we understand one another, and in my case, my own parents. In some ways, this is really self-inflicted. If I were to show any interest in pushing past the language barrier that I’ve formed over years of consuming more western media, maybe I would know my parents past the fact that they enjoy gardening and going to Marshalls. As long as I’m not putting in the effort, this barrier that I’ve formed will continue to keep its place.</p>
+                <p>My parents both grew up in Islamic households, and consequently I’ve grown up muslim as well. Much of Islam is rooted in the Arabic language, such as the prayers, greetings, and our holy book. Due to this, both my parents and I have learned to read and speak Arabic as part of our religion. There’s one major issue, in which neither of us even slightly understand Arabic. I can go to Steinway and read out the Arabic lettering on the storefronts perfectly fine, but if you wanted me to tell you what anything I read meant, I would be absolutely clueless to it all, and the same can be said for my parents. This is a language barrier that I share with my parents. Despite sharing the same barrier, the way this barrier is experienced between myself and my parents differs heavily. Bangladesh has more than ninety percent muslim in population. Islamic teachings and principles are just a part of growing up there, it was taught in schools, enforced by relatives and strangers. It’s difficult not to have learned about the values and rules that a religion imposes when you are constantly surrounded by it, which is how my parents were able to have a deeper understanding of Islam despite the language barrier. The same can’t really be said for myself. New York City is incredibly diverse so expecting a single religion to be most prominently taught in a community is unrealistic. Most of my friends are really only religious in identity and to please our family. In a way, their experience with the language barrier has affected my own experience with the same barrier. Whenever I’m told to read my holy book by my parents, I read it for their sake. They can praise my clarity as much as they wish, but if I ask what any of it means, I’ll never get an answer. My understanding of Islam stems purely from the criticisms that my parents have had for myself and others. Ever since I was a child, I’ve never been able to understand any ideas without a reason why. When I was younger, my mother would spend hours trying to teach me my times tables, but I just couldn’t get it because they never told me what multiplication even was, and in concept, this was no difference. When I would ask my mother why something was deemed wrong in Islam, the only answer I’ve really gotten was that it was just against God’s will. I can’t even blame them for that answer because that’s how they themselves were taught a religion based on a language completely foreign to them. Once again, this might just be self-inflicted as well. It’s almost embarrassing that taking half of a theology class this semester has taught me more about the history and values of a whole other religion than I have taught myself about my own.  There are English translations of our holy book that I could read to gain a better understanding of the reasonings and teachings of Islam. I haven’t really tried getting past the language barriers surrounding my religion at all.</p>
+                <p>Many of the issues I’ve faced because of my experience with language barriers are really my fault. Exploring an entire culture and researching a religion on my own is a tedious task. I could start listening to the same music as my father, or watch the same television shows as my mother. I could translate Bengali literature into English and get a better understanding of the stories that my parents grew up with. I could do my own research on Islam and read the many translated editions of its holy book. There are many things I could do to overcome these barriers that prevent me from understanding, but to be honest, I’m not sure if I would do any of it at all. My sense of belonging has never stemmed from the commonalities I have with people, but the love I have for the people closest to me. </p>
+                <a href="#top" class="back-to-top">Back to Top</a>
+            `,
+             'essay4': `
+                <h2>five in the afternoon</h2>
+                <p>Gender has always been a very personal topic to me. It's never been a part of my identity that I've ever felt comfortable discussing with anyone but myself. I'm very bad with scrutiny, the feeling of being put under a microscope is something I really can't handle. There's a lot of contempt that comes with deviating even a little from gender norms, even when it's not meant to be intentional. Growing up, I've watched girls in my classes be mocked for upper lip hair, and guys being teased or gossiped about for their voices. I haven't been exempt from it either, I've had long-ish hair my entire life, which came with its own set of disparaging comments and remarks. Honestly, I envy people who can express their gender identities freely, especially transgender people, even if I don't really have a full understanding of their experience. Knowing the hate that even those born with these differences experience, I don't think I could fathom the contempt that people who work to present themselves differently experience, presumably just existing as who they are. It takes a massive amount of mental strength that I'm sure I don't have.</p>
+                <p>Despite being born male, for a decent portion of my life, apparently that was up for dispute. At least, to everyone besides myself and my family, I think. I was really short, with shoulder-length hair and a voice that could shatter glass, if I ever used it. There were multiple picture days growing up where I lined up with the other boys, and got moved to the girls section for the class photo. I grew up scared of pretty much any confrontation, so I didn't even bother trying to correct the photographer. I'm not really sure why any of my teachers never spoke up for me either. It could be that they thought I was fine with being grouped with the girls since I didn't say anything myself, which I was, I could really care less, but they also knew I was selectively mute, and I can't really understand their thought process with that whole situation. This contention of my gender followed me up until my sophomore year of high school. By that point, I still hadn't started my adolescence, but I did end up cutting my hair short for the first time in my life. I hated it. The next year, I did it again, and I still hated it. Ever since then, I've just been growing my hair out indefinitely, and I don't really know what to do with it. If I go to a barber shop, they're just going to cut it short again, and I don't know if my dad would be happy with me going to a salon. I'm aware I'm grown and can make my own choices, but I know better than to have the people who I'm dependent on condemn me. Eventually, I'm going to have to do something with my hair, and I'm going to have to choose between my own happiness, or at best, avoiding an awkward conversation about myself.</p>
+                <p>To say I was a late bloomer would be putting it lightly. I spent all of middle school basically praying for the day that my voice would crack. By the end of 8th grade, I was about 4'8 and nearly 70 pounds. It felt like everyone else was growing up, and I was just falling behind, stuck as a child forever. I didn't even feel like a peer when I got to high school. It took until the end of my junior year of high school for my voice to finally lower, and not even by much. In a strange way, I actually feel okay with not changing all that much. I hate the little facial hair that came with it. Every morning without fail, I try my best to shave the hair on my upper lip down to as clean as possible. One pass, two passes, three passes, and despite my efforts, I can never really get it as clean as I want it to be. When I look in the mirror, my stubble is the first thing that jumps out at me, and it never fails to put me into a bad mood. It might just be an innate fear of growing up and getting old. After all, it's all a part of being a man, the good and the bad. I can admit it's a bit conceited to be bothered by the hair on my upper lip, there are plenty of people who have bigger problems than me. I can admit that'm not as mature as most people my age, both physically and mentally. It's possible I feel this way because I spent my entire life as a kid and I'm bad at handling massive changes. It could be that it all seemed to happen so fast. I grew about half a foot between my junior and senior years of high school to go with my voice. There were a few kids that seemed genuinely disturbed that I had grown taller than them over the summer. (my high school was very short height-wise.) Despite finally getting what I wanted, I'm not even sure if that's what I even wanted anymore.</p>
+                <p>It's not like I don't like being a man. The social repercussions of being a man seem much lighter than being a woman. I don't have to have a certain appearance to be tolerated. Since my high school was tiny, it was really easy to make certain social observations, and one thing that I had noticed is how not meeting certain beauty standards within your gender, specifically women, severely affects the amount of respect a person gets from their peers. This might just be intensified in a setting of only teenagers, but as boys, we can be outright mean to women that don't really fit our beauty standards. Having a male friend group in high school meant I've heard it all. We would just say mean things about people who were really only just existing. Our friends that were women were at best, dismissive of them entirely. Even if I didn't say anything myself, not intervening makes me just as complicit as my friends. As a man, I don't think I face that same discrimination for my appearance. Although I was pretty far from any beauty standards on either end, I didn't really experience that overall avoidant nature that I noticed towards women who didn't. I don't need to put the same amount of effort in my appearance in order to be treated like a human being.</p>
+                <p>Gender doesn't really feel like something I could ever really talk about with anyone openly. Our appearances, our personality, our maturity, are all aspects of ourselves that are expected to change as we age, but gender is one of those aspects that society expects to remain the same all throughout our lives. I'm aware of the argument that gender is just the sex we were born as, but I've never really seen the sense in that. There are a lot of societal expectations that are assigned to both men and women, such as the clothes we wear, the things we're supposed to enjoy, the lessons that we're taught, and there are bound to be people who aren't happy with the pressures placed on them. The hate that people who don't conform to traditional norms doesn't stem from a biological point of view, but the social backlash of not following the societal ideals imposed upon people by society. If at any point in my life, I were to make any realizations that go against what my family and friends think of me, I wouldn't be surprised if I lost every one of them. People who have actually gone through this experience have accomplished a feat of massive internal strength, and I hope that at some point, the tides will shift in their favor, and they'll be able to rebuild some relationships with people they used to love.</p>
+                <a href="#top" class="back-to-top">Back to Top</a>
+            `,
+            'jor': `
+                <h2>journal entries</h2>
+                <div class="journal-entry">
+                    <div class="journal-header">
+                        <span class="journal-entry-title">big changes</span>, <span class="journal-entry-date">2/18/25</span>
+                    </div>
+                    <div class="journal-entry-box">
+                        <p>To me, the most radical difference that I've dealt with during my first year of college so far is I guess, the "grandiose" nature of St. Johns.</p>
+                        <p>My high school was incredibly small, especially for a public New York City high school. There were maybe 60 kids in my graduating class. I was almost always in classes with my friends, or around them incredibly often due to how small the population of my school was. The building matched the size, we didn't have a gymnasium or auditorium either, for P.E. we had to go to the local park for class. It was a tight knit community.</p>
+                        <p>In terms of scale, St. Johns is nothing like that at all. I almost never see the same people twice on the way to my classes. To meet the friends or acquaintances I made last semester, I would have to go out of my way to interact with them in person now. Honestly, I find the sheer number of people overwhelming in a way that I really didn't expect to feel.</p>
+                        <p>I appreciate that for the most part, my class sizes have been relatively small. I don't have large lecture hall classes like my friends in other colleges, which I think I would really hate.</p>
+                        <p>Socially, I'm not really a party person, especially as a commuter. Almost every single one of my friends that I have met here live incredibly far from my home, which makes seeing them feel almost static and controlled rather than casual. Most of my friends near me left the city for college, and I miss being able to just walk a few minutes and do something.</p>
+                    </div>
+                </div>
+                <div class="journal-entry">
+                    <div class="journal-header">
+                        <span class="journal-entry-title">publicity</span>, <span class="journal-entry-date">2/21/25</span>
+                    </div>
+                    <div class="journal-entry-box">
+                        <p>The idea of a border being both physical and abstract is an interesting topic.</p>
+                        <p>In my own sense, a border is a physical or metaphorical marker that separates areas, it could be something physical, like a wall between countries, or more metaphorical like you mentioned, like the difference between thought and writing.</p>
+                        <p>By writing, or creating, or just doing, we cross the metaphorical borders between our mind and the actual physical world. When we put out our thoughts onto paper, even if we intend to keep it private or personal, we're still breaking or crossing the borders between the private state of our mind and the publicity of words on a sheet of paper.</p>
+                    </div>
+                </div>
+                <div class="journal-entry">
+                    <div class="journal-header">
+                        <span class="journal-entry-title">roosevelt avenue</span>, <span class="journal-entry-date">3/14/25</span>
+                    </div>
+                    <div class="journal-entry-box">
+                        <p>If I had to assign myself, or associate myself with a specific community, I guess where I'm from is a good place to start.</p>
+                        <p>I'm from around Jackson Heights, which is a really densely populated part of Queens. I can't emphasize further how crowded that neighborhood is. You're never more than an arms length away from another person, and during holidays it can become thoroughly claustrophobic.</p>
+                        <p>If you're south Asian and from Queens, there's a pretty decent chance that you either live there or have been there, or have relatives that live there, and for myself, I fall into all three categories. Despite moving there maybe 4 years ago, I've been able to adapt to the community pretty well. I know where to go to get food, I know certain shortcuts to get home faster, I know where I should go to meet up with my friends, I know where not to go so I could avoid my extended family, there's a sense of knowledge that you get living in a place for long enough and understanding the community.</p>
+                    </div>
+                </div>
+                 <div class="journal-entry">
+                    <div class="journal-header">
+                        <span class="journal-entry-title">book report</span>, <span class="journal-entry-date">4/4/25</span>
+                    </div>
+                    <div class="journal-entry-box">
+                         <p>The familiarity that we experience in a circular continuity, being around the same people, waking up in the same place every day, or just even having a routine, is missing from the life of a traveler. There is no daily schedule that you could follow precisely each day, that starts and ends. "every moment is unique, no moment is repeated." Tokarczuck mentions how she doesn't really take time seriously, if she lands in another country in the evening, she's not just going to fall asleep as soon as she gets to her room because it's the appropriate thing to do in a circular continuity, what she does is completely up to her, and in her way of life, completely normal.</p>
+                        <p>The idea of linearity and not circling back around is present in the way she structures her article. The topics of each segment, being the things that we bring with us during our travels, seem almost self contained, and more of a description of experiences of those things, rather than reflection. There's no clear lesson to be learned or something greater than what it is embedded in the text, she's really to the point. with what she talks about. No segment seems to overstay their welcome, she moves right onto the next topic once she presumably runs out of things to say and write, with no reflective conclusion. There isn't even a proper conclusion, she abruptly ends her article on a note about mummification. This style of prose could be described as linear. She writes in the same way that she lives her life, with no clear beginning or end.</p>
+                    </div>
+                </div>
+                <a href="#top" class="back-to-top">Back to Top</a>
+            `
+        };
+
+        // Function to load content into the main area
+        function loadContent(key) {
+            const mainContentDiv = document.getElementById('main-content');
+            if (contentData[key]) {
+                mainContentDiv.innerHTML = contentData[key];
+            } else {
+                mainContentDiv.innerHTML = '<h2>Content Not Found</h2><p>The requested content could not be loaded.</p>';
+            }
+            // Ensure "Back to Top" links work after content load
+             // Optional: Scroll to top of main content after loading
+             mainContentDiv.scrollTop = 0; // Or document.documentElement.scrollTop = /* desired position */;
+        }
+
+        // --- Dark Mode Functionality ---
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+        const darkModeKey = 'darkModeEnabled';
+
+        // Function to enable dark mode
+        function enableDarkMode() {
+            body.classList.add('dark-mode');
+            localStorage.setItem(darkModeKey, 'true'); // Save preference
+        }
+
+        // Function to disable dark mode
+        function disableDarkMode() {
+            body.classList.remove('dark-mode');
+            localStorage.setItem(darkModeKey, 'false'); // Save preference
+        }
+
+        // Event listener for the toggle button
+        darkModeToggle.addEventListener('click', () => {
+            if (body.classList.contains('dark-mode')) {
+                disableDarkMode();
+            } else {
+                enableDarkMode();
+            }
+        });
+
+        // Check local storage on page load to apply saved preference
+        function applySavedTheme() {
+             const isDarkMode = localStorage.getItem(darkModeKey) === 'true';
+             if (isDarkMode) {
+                 enableDarkMode();
+             } else {
+                 disableDarkMode(); // Ensure light mode is default if nothing saved
+             }
+        }
+        // --- End Dark Mode Functionality ---
+
+
+        // Load initial content and apply theme when the page finishes loading
+        window.onload = function() {
+            applySavedTheme(); // Apply theme first
+            loadContent('intro'); // Then load default content
+        };
+
+    </script>
+
+</body>
+</html>
